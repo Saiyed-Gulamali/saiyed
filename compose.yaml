@@ -1,0 +1,35 @@
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Gulamali100962492
+      POSTGRES_DB: labonedb
+    ports:
+      - 3000:3000
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: labonedb
+      POSTGRES_PASSWORD: Gulamali100962492
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
